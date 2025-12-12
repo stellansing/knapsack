@@ -1,16 +1,16 @@
 package org.example;
 //基础01背包
 public class BasicKnapsack {
-    public static int solve(int[] v, int[] w, int c){
-        int length = v.length;
-        int[] dp=new int[c+1];
-        for(int i=0;i<=c;i++) dp[i]=0;
+    public static int solve(int[] value, int[] weight, int capacity){
+        int length = value.length;
+        int[] dp=new int[capacity+1];
+        for(int i=0;i<=capacity;i++) dp[i]=0;
         for(int i=0;i<length;i++){
-            for(int j=c;j>=w[i];j--){
-                dp[j] = Math.max(dp[j], dp[j - w[i]] + v[i]);
+            for(int j=capacity;j>=weight[i];j--){
+                dp[j] = Math.max(dp[j], dp[j - weight[i]] + value[i]);
             }
         }
-        return dp[c];
+        return dp[capacity];
     }
 
     public static void main(String[] args) {

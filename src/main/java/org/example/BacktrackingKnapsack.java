@@ -13,18 +13,18 @@ public class BacktrackingKnapsack {
             return Math.min(a, b);
         }
     }
-    public static List<Integer> solve(int[] v, int[] w, int c, int maxV) {
+    public static List<Integer> solve(int[] value, int[] weight, int c, int maxV) {
         int allValue = 0;
-        for (int k : v) allValue += k;
+        for (int k : value) allValue += k;
         if(allValue < c){
             int[] dp = new int[allValue+1];//此时dp[i]表示达到价值i所需最小重量
             dp[0]=0;
             for (int i = 1; i <= allValue; i++) dp[i]=-1;//-1表示穷大
 
-            for (int i = 0; i < v.length; i++) {
-                for (int j=allValue;j>=v[i];j--){
-                    if(dp[j-v[i]]==-1) continue;//仍为无穷大
-                    dp[j]=findMin(dp[j],dp[j-v[i]]+w[i]);
+            for (int i = 0; i < value.length; i++) {
+                for (int j=allValue;j>=value[i];j--){
+                    if(dp[j-value[i]]==-1) continue;//仍为无穷大
+                    dp[j]=findMin(dp[j],dp[j-value[i]]+weight[i]);
                 }
             }
 
@@ -49,44 +49,44 @@ public class BacktrackingKnapsack {
                 for(i = maxV;dp[i]<c && i<=allValue; i++);
                 System.out.println("最大价值应该为"+(i-1));
             }
-            if (maxV == c) {
+            if (dp[maxV] == c) {
                 System.out.println("所给价值为最大价值");
             }
 
             List<Integer> ans = new ArrayList<>();
             int nowValue = maxV;
-            for (int i = v.length-1; i >=0 && nowValue!=0; i--) {
-                if(nowValue<v[i]) continue;
-                if(dp[nowValue]==dp[nowValue-v[i]]+w[i]){
+            for (int i = value.length-1; i >=0 && nowValue!=0; i--) {
+                if(nowValue<value[i]) continue;
+                if(dp[nowValue]==dp[nowValue-value[i]]+weight[i]){
                     ans.add(i);
-                    nowValue-=v[i];
+                    nowValue-=value[i];
                 }
             }
             return ans;
         }else{
-            int[][] dp = new int[v.length][c+1];//dp[i][j]表示前i个物品，背包容量为j时，最大价值
-            for(int j = c; j >= w[0] ; j--) dp[0][j] = v[0];
+            int[][] dp = new int[value.length][c+1];//dp[i][j]表示前i个物品，背包容量为j时，最大价值
+            for(int j = c; j >= weight[0] ; j--) dp[0][j] = value[0];
 
-            for(int i = 1; i < v.length; i++){
-                for(int j = c;j >= w[i] ; j--){
-                    dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-w[i]] + v[i]);
+            for(int i = 1; i < value.length; i++){
+                for(int j = c;j >= weight[i] ; j--){
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-weight[i]] + value[i]);
                 }
-                for(int j = 0; j < w[i]; j++){
+                for(int j = 0; j < weight[i]; j++){
                     dp[i][j] = dp[i-1][j];
                 }
             }
 
             if(maxV>allValue){
                 System.out.println("无法达到价值"+maxV);
-                System.out.println("最大价值应该为"+dp[v.length-1][c]);
+                System.out.println("最大价值应该为"+dp[value.length-1][c]);
                 return null;
             }
-            if(dp[v.length-1][c]<maxV) {
+            if(dp[value.length-1][c]<maxV) {
                 System.out.println("无法达到价值"+maxV);
-                System.out.println("最大价值应该为"+dp[v.length-1][c]);
+                System.out.println("最大价值应该为"+dp[value.length-1][c]);
                 return null;
-            }else if(dp[v.length-1][c]>maxV){
-                System.out.println("最大价值应该为"+dp[v.length-1][c]);
+            }else if(dp[value.length-1][c]>maxV){
+                System.out.println("最大价值应该为"+dp[value.length-1][c]);
             }else{
                 System.out.println("所给价值为最大价值");
             }
@@ -94,19 +94,19 @@ public class BacktrackingKnapsack {
             List<Integer> ans = new ArrayList<>();
             int i,j;
             for(j = c;j>0; j--){
-                if(dp[v.length-1][j]<maxV) {
+                if(dp[value.length-1][j]<maxV) {
                     j++;
                     break;
                 }
             }
-            for (i = v.length-1; i >0 && j>0; i--) {
-                if(j<w[i]) continue;
-                if(dp[i][j]==dp[i-1][j-w[i]]+v[i]){
+            for (i = value.length-1; i >0 && j>0; i--) {
+                if(j<weight[i]) continue;
+                if(dp[i][j]==dp[i-1][j-weight[i]]+value[i]){
                     ans.add(i);
-                    j-=w[i];
+                    j-=weight[i];
                 }
             }
-            if(j>=w[0]) ans.add(0);//第一个物品无前件，特殊处理
+            if(j>=weight[0]) ans.add(0);//第一个物品无前件，特殊处理
 
             return ans;
         }

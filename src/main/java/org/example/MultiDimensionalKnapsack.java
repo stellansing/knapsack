@@ -1,7 +1,7 @@
 package org.example;
 
 public class MultiDimensionalKnapsack {
-    private static int multiDimensionalKnapsack(int[][] items, int[] limits) {
+    private static int solve(int[][] items, int[] limits) {
 
             int k = limits.length;
 
@@ -47,19 +47,19 @@ public class MultiDimensionalKnapsack {
         //第一个维度为价值
         int[][] items = {{10,2,3},{15,3,4},{20,4,2}};
         int[] limits = {6,7};
-        System.out.println(multiDimensionalKnapsack(items, limits));
+        System.out.println(solve(items, limits));
 
         items = new int[][]{{3,2,1},{4,3,2},{5,4,3},{8,5,4}};
         limits = new int[]{7,6};
-        System.out.println(multiDimensionalKnapsack(items, limits));
+        System.out.println(solve(items, limits));
 
         items = new int[][]{{60 ,30, 20, 100},{70,40, 10, 150 },{ 50,20, 30, 200},{90,50, 25, 180 },{40,25, 15, 120 }};
         limits = new int[]{100,50,300};
-        System.out.println(multiDimensionalKnapsack(items, limits));
+        System.out.println(solve(items, limits));
 
         items = new int[][]{{300, 200, 80, 100},{250, 120, 300, 350},{ 50, 250, 200,100},{150, 100, 150,250},{400,300, 70, 200}};
         limits = new int[]{500,200,400};
-        System.out.println(multiDimensionalKnapsack(items, limits));
+        System.out.println(solve(items, limits));
 
         items = new int[][]{
                 {200,30, 4, 100, 300},
@@ -69,6 +69,6 @@ public class MultiDimensionalKnapsack {
                 {350,60, 10, 250, 350}
         };
         limits = new int[]{80, 16, 500, 1000};
-        System.out.println(multiDimensionalKnapsack(items, limits));
+        System.out.println(solve(items, limits));
     }
 }
