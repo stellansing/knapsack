@@ -35,36 +35,36 @@ public class MixedKnapsack {
             }
         }
     }
-    private static int solve(int capacity,List<Item> items){
-        List<Item> baKnapsack = new ArrayList<>();
-        List<Item> UnKnapsack = new ArrayList<>();
-        for (Item item : items) {
-            int count = item.count;
-            int weight = item.weight;
-            int value = item.value;
+private static int solve(int capacity,List<Item> items){
+    List<Item> baKnapsack = new ArrayList<>();
+    List<Item> UnKnapsack = new ArrayList<>();
+    for (Item item : items) {
+        int count = item.count;
+        int weight = item.weight;
+        int value = item.value;
 
-            if(count==1){
-                baKnapsack.add(new Item(weight, value, count));
-            }else if(count>1){
-                while (count > 0) {
-                    int k = Math.min(count, 1 << (int) (Math.log(count) / Math.log(2))); // 二进制拆分
-                    baKnapsack.add(new Item(weight * k, value * k, k));
-                    count -= k;
-                }
-            }else{
-                UnKnapsack.add(new Item(weight, value, count));
+        if(count==1){
+            baKnapsack.add(new Item(weight, value, count));
+        }else if(count>1){
+            while (count > 0) {
+                int k = Math.min(count, 1 << (int) (Math.log(count) / Math.log(2))); // 二进制拆分
+                baKnapsack.add(new Item(weight * k, value * k, k));
+                count -= k;
             }
-
+        }else{
+            UnKnapsack.add(new Item(weight, value, count));
         }
 
-        int[] dp = new int[capacity + 1];
-        dpHelper(baKnapsack, capacity, dp);
-        dpHelper(UnKnapsack, capacity, dp);
-
-        return dp[capacity];
-
-
     }
+
+    int[] dp = new int[capacity + 1];
+    dpHelper(baKnapsack, capacity, dp);
+    dpHelper(UnKnapsack, capacity, dp);
+
+    return dp[capacity];
+
+
+}
     public static void main(String[] args) {
         //物品数量为-1表示可以选无穷个
         List<Item> items = new ArrayList<>(Arrays.asList(

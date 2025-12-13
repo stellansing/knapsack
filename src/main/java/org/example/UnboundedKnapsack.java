@@ -15,7 +15,6 @@ public class UnboundedKnapsack {
     }
     public static int solve(List<Item> items, int capacity) {
         int n = items.size();//物品数量
-
         //求解单位价值最大和次打值
         int alpha = 0;//alpha为单位价值最大的索引
         double pa = -1.0, pb = -1.0;//pa和pb分别为最大和次打值单位价值
@@ -33,17 +32,18 @@ public class UnboundedKnapsack {
             pb = pa;
         }
 
-        //计算最简单情况及回溯次数
-        int wAlpha = items.get(alpha).weight;
-        int vAlpha = items.get(alpha).value;
-        int m = capacity % wAlpha;
-        int q = capacity / wAlpha;
-
         if (Math.abs(pa - pb) < 1e-9) {//最大与次大单位价值接近，退化为传统动态规划算法
             int[] fullDp = new int[capacity + 1];
             dpHelper(items, capacity,0,fullDp);
             return fullDp[capacity];
         }
+
+
+        //计算最简单情况及回溯次数
+        int wAlpha = items.get(alpha).weight;
+        int vAlpha = items.get(alpha).value;
+        int m = capacity % wAlpha;
+        int q = capacity / wAlpha;
 
         items.set(alpha, new Item(wAlpha, 0));//排除单位价值最大的物品
         int[] dp = new int[capacity + 1];
@@ -58,7 +58,6 @@ public class UnboundedKnapsack {
         int rnewMaxCap = m + km * wAlpha;//需要回溯的背包容量rnewMaxCap
         rnewMaxCap = Math.min(rnewMaxCap, capacity);//与原背包大小对比，保证处理范围在问题之内
         dpHelper(items, rnewMaxCap,m,dp);
-
         int maxValue = 0;
         for (int i = 0; i <= km ; i++) {
             int currentCap = m + i * wAlpha;
