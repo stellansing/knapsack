@@ -2,10 +2,8 @@ package org.example;
 
 public class MultiDimensionalKnapsack {
     private static int solve(int[][] items, int[] limits) {
-
-            int k = limits.length;
-
             // 预计算总状态数和偏移量
+            int k = limits.length;
             int totalStates = 1;
             int[] offsets = new int[k];
             offsets[0] = 1;
@@ -14,17 +12,13 @@ public class MultiDimensionalKnapsack {
                 offsets[i] = offsets[i - 1] * (limits[i - 1] + 1);//上一维度的值加上（当前维度的值加上额外的0）
                 totalStates *= (limits[i] + 1);
             }
-
             int[] dp = new int[totalStates];//总共有totalStates种状态
 
             // 处理每个物品
             for (int[] item : items) {
-
-                // 反向遍历状态
                 for (int state = totalStates - 1; state >= 0; state--) {
                     boolean feasible = true;
                     int prevState = state;//记录选了当前物品后，减少物品占用的容量后的状态
-
                     // 检查并计算前一个状态
                     for (int d = 0; d < k; d++) {
                         int dimValue = (state / offsets[d]) % (limits[d] + 1);
@@ -34,13 +28,11 @@ public class MultiDimensionalKnapsack {
                         }
                         prevState -= item[d+1] * offsets[d];
                     }
-
                     if (feasible && prevState >= 0) {
                         dp[state] = Math.max(dp[state], dp[prevState] + item[0]);
                     }
                 }
             }
-
             return dp[totalStates - 1];
     }
     public static void main(String[] args) {

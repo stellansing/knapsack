@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
+
 //背包逆问题，依据结果推组合
 public class BacktrackingKnapsack {
     public static int findMin(int a,int b){
@@ -21,8 +22,11 @@ public class BacktrackingKnapsack {
 
             for (int i = 0; i < value.length; i++) {
                 for (int j=maxV;j>=value[i];j--){
-                    if(dp[j-value[i]]==-1) continue;//仍为无穷大
+                    if(dp[j-value[i]]==-1) continue;//仍为无穷大(-1表示无穷大)
                     dp[j]=findMin(dp[j],dp[j-value[i]]+weight[i]);
+                }
+                for (int j=value[i]-1;j>0;j--){
+                    dp[j]=findMin(dp[j],weight[i]);
                 }
             }
 
@@ -35,7 +39,7 @@ public class BacktrackingKnapsack {
 
             List<Integer> ans = new ArrayList<>();
             int nowValue = maxV;
-            for (int i = value.length-1; i >=0 && nowValue!=0; i--) {
+            for (int i = 0; i < value.length && nowValue!=0; i++) {
                 if(nowValue<value[i]) continue;
                 if(dp[nowValue]==dp[nowValue-value[i]]+weight[i]){
                     ans.add(i);
@@ -67,27 +71,43 @@ public class BacktrackingKnapsack {
                     break;
                 }
             }//找到最小背包大小
-            for (int i = length-1; i >=0 && j>0; i--) {
+            for (int i = 0; i <value.length && j>0; i++) {
                 if(j<weight[i]) continue;
                 if(dp[j]==dp[j-weight[i]]+value[i]){
                     ans.add(i);
                     j-=weight[i];
                 }
             }
-
-
-
-
             return ans;
         }
 
     }
-    public static void main(String[] args) {
+    private static void print(int[] value, int[] weight, int capacity, int maxV){
+        System.out.print("对于背包大小"+capacity+"，有"+value.length+"个物品，其价值和重量分别为：");
+        for(int i=0;i<value.length;i++){
+            System.out.print("("+value[i]+","+weight[i]+")");
+        }
+        System.out.println();
+
         List<Integer> ans;
-        if((ans=solve(new int[]{1,2,3},new int[]{2,4,5},7,10))!=null) System.out.println("达成该价值可能的组合为"+ans);
+        if((ans=solve(value,weight,capacity,maxV))!=null) {
+            System.out.print("达成价值"+maxV+"可能的组合为:");
+            for(Integer x:ans){
+                System.out.print("物品"+(x+1));
+            }
+            System.out.println();
+        }
         System.out.println();
-        if((ans=solve(new int[]{5,6,7},new int[]{3,4,5},10,11))!=null) System.out.println("达成该价值可能的组合为"+ans);
-        System.out.println();
-        if((ans=solve(new int[]{3,5,6},new int[]{2,3,5},8,8))!=null) System.out.println("达成该价值可能的组合为"+ans);
+    }
+    public static void main(String[] args) {
+
+        print(new int[]{1,2,3},new int[]{2,4,5},7,10);
+        print(new int[]{5,6,7},new int[]{3,4,5},10,11);
+        print(new int[]{1,4,5,7},new int[]{1,3,4,5},8,12);
+        print(new int[]{2,3,4,5},new int[]{3,4,5,6},15,10);
+        print(new int[]{10,20,30},new int[]{5,10,15},20,30);
+        print(new int[]{1,1,1,1},new int[]{2,2,2,2},5,2);
+        print(new int[]{5},new int[]{3},3,5);
     }
 }
+

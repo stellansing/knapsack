@@ -16,7 +16,7 @@ public class BasicBackKnapsack {
         }
 
         List<Integer> ans = new ArrayList<>();
-        for (int i = value.length-1, j = capacity; i >=0 && j>0; i--) {
+        for (int i = 0, j = capacity; i <value.length && j>0; i++) {
             if(j<weight[i]) continue;
             if(dp[j]==dp[j-weight[i]]+value[i]){
                 ans.add(i);

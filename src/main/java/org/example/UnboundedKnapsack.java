@@ -79,6 +79,15 @@ public class UnboundedKnapsack {
         }
     }
 
+    private static void print(List<Item> items, int capacity){
+        System.out.print("对于背包大小"+capacity+"，有"+items.size()+"种物品，其价值和重量分别为：");
+        for(int i=0;i<items.size();i++){
+            System.out.print("("+items.get(i).value+","+items.get(i).weight+")");
+        }
+        System.out.println();
+        System.out.println("可以达到的最大价值为"+solve(items,capacity));
+        System.out.println();
+    }
 
     public static void main(String[] args) {
 
@@ -88,13 +97,37 @@ public class UnboundedKnapsack {
                 new Item(7, 17), new Item(8, 20), new Item(9, 24),
                 new Item(10, 3)
         ));
-        System.out.println(solve(items, 27));
+        print(items,27);
 
         items.clear();
         items = new ArrayList<>(Arrays.asList(
                 new Item(2, 3), new Item(3, 4), new Item(4, 5),
                 new Item(5, 6)
         ));
-        System.out.println(solve(items, 10));
+        print(items,10);
+
+        items.clear();
+        items = new ArrayList<>(Arrays.asList(
+                new Item(3, 5)
+        ));
+        print(items,15);
+
+        items.clear();
+        items = new ArrayList<>(Arrays.asList(
+                new Item(1, 1), new Item(3, 4), new Item(4, 5), new Item(5, 7)
+        ));
+        print(items,20);
+
+        items.clear();
+        items = new ArrayList<>(Arrays.asList(
+                new Item(2, 4), new Item(3, 6), new Item(4, 8)
+        ));
+        print(items,12);
+
+        items.clear();
+        items = new ArrayList<>(Arrays.asList(
+                new Item(5, 10), new Item(4, 7), new Item(3, 5)
+        ));
+        print(items,6);
     }
 }
