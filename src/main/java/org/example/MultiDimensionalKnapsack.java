@@ -1,7 +1,7 @@
 package org.example;
 
 public class MultiDimensionalKnapsack {
-    private static int solve(int[][] items, int[] limits) {
+    public static int solve(int[][] items, int[] limits) {
             // 预计算总状态数和偏移量
             int k = limits.length;
             int totalStates = 1;

@@ -99,12 +99,13 @@ public class UnboundedKnapsack {
         ));
         print(items,27);
 
+
+        //（物品 A：价值 10，重量 3；物品 B：价值 11，重量 4；物品 C：价值 12，重量 5）
         items.clear();
         items = new ArrayList<>(Arrays.asList(
-                new Item(2, 3), new Item(3, 4), new Item(4, 5),
-                new Item(5, 6)
+                new Item(3, 10), new Item(4, 11), new Item(5, 12)
         ));
-        print(items,10);
+        print(items,20);
 
         items.clear();
         items = new ArrayList<>(Arrays.asList(

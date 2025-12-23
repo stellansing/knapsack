@@ -35,7 +35,7 @@ public class MixedKnapsack {
             }
         }
     }
-private static int solve(int capacity,List<Item> items){
+public static int solve(int capacity,List<Item> items){
     List<Item> baKnapsack = new ArrayList<>();
     List<Item> UnKnapsack = new ArrayList<>();
     for (Item item : items) {
