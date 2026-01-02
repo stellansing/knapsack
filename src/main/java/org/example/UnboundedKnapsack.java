@@ -16,65 +16,55 @@ public class UnboundedKnapsack {
     public static int solve(List<Item> items, int capacity) {
         int n = items.size();//物品数量
         //求解单位价值最大和次打值
-        int alpha = 0;//alpha为单位价值最大的索引
-        double pa = -1.0, pb = -1.0;//pa和pb分别为最大和次打值单位价值
-        for (int i = 0; i < n; i++) {
-            double p = (double) items.get(i).value / items.get(i).weight;
-            if (p > pa) {
-                pb = pa;
-                pa = p;
-                alpha = i;
-            } else if (p > pb && i != alpha) {
-                pb = p;
+        int indexA=0;//alpha为单位价值最大的索引
+        double pa=-1.0,pb=-1.0;//pa和pb分别为最大和次打值单位价值
+        for(int i=0;i<n;i++){
+            double p=(double)items.get(i).value/items.get(i).weight;
+            if (p>pa){
+                pb=pa;
+                pa=p;
+                indexA=i;
+            }else if(p>pb){
+                pb=p;
             }
         }
-        if (pb < 0) {
-            pb = pa;
-        }
 
-        if (Math.abs(pa - pb) < 1e-9) {//最大与次大单位价值接近，退化为传统动态规划算法
-            int[] fullDp = new int[capacity + 1];
-            dpHelper(items, capacity,0,fullDp);
-            return fullDp[capacity];
+        int[] dp = new int[capacity+1];
+        if(pb<0 || pa-pb<1e-9){//最大与次大单位价值接近，退化为传统动态规划算法
+            dpHelper(items, capacity,0,dp);
+            return dp[capacity];
         }
-
 
         //计算最简单情况及回溯次数
-        int wAlpha = items.get(alpha).weight;
-        int vAlpha = items.get(alpha).value;
-        int m = capacity % wAlpha;
-        int q = capacity / wAlpha;
+        int weightA = items.get(indexA).weight;
+        int valueA = items.get(indexA).value;
+        int m = capacity%weightA;
+        int q = capacity/weightA;
 
-        items.set(alpha, new Item(wAlpha, 0));//排除单位价值最大的物品
-        int[] dp = new int[capacity + 1];
+        items.set(indexA, new Item(weightA, 0));//排除单位价值最大的物品
         dpHelper(items, m,0, dp);
-        int rM = dp[m];//剩余容量（总容量 mod Wa）最大价值
-        double numerator = pb * m - rM;
-        double denominator = (pa - pb) * wAlpha;
-        int km = (int) (numerator / denominator) + 1;//依据公式求解最大回溯次数km
-        km = Math.min(km, q);
+        int km = Math.min((int)((pb*m-dp[m])/((pa-pb)*weightA))+1,q);//依据公式求解最大回溯次数km
 
         //回溯求最终解
-        int rnewMaxCap = m + km * wAlpha;//需要回溯的背包容量rnewMaxCap
-        rnewMaxCap = Math.min(rnewMaxCap, capacity);//与原背包大小对比，保证处理范围在问题之内
-        dpHelper(items, rnewMaxCap,m,dp);
-        int maxValue = 0;
-        for (int i = 0; i <= km ; i++) {
-            int currentCap = m + i * wAlpha;
-            if (currentCap > rnewMaxCap) break;
-            int currentValue = (q-i) * vAlpha + dp[currentCap];//(q-i)为选alpha的次数
-            maxValue = Math.max(maxValue, currentValue);
-        }
+        int newMaxCap = Math.min(m+km*weightA,capacity);//与原背包大小对比，保证处理范围在问题之内
+        dpHelper(items,newMaxCap,m,dp);
 
+        int maxValue=0,currentCap=m;
+        for(int i=0;i<=km;i++){
+            if(currentCap>newMaxCap) break;
+            maxValue = Math.max(maxValue,q*valueA+dp[currentCap]);
+            currentCap += weightA;
+            q--;
+        }
         return maxValue;
     }
 
     //动态规划求解，
-    private static void dpHelper(List<Item> items, int capacity,int hadCalculateCapacity,int[] dp) {
+    private static void dpHelper(List<Item> items, int capacity,int hadCalculateCapacity,int[] dp){
         int n = items.size();
-        for (int i = 0; i < n; i++) {
-            for (int j = Math.max(items.get(i).weight, hadCalculateCapacity+1); j <= capacity; j++) {
-                dp[j] = Math.max(dp[j], dp[j - items.get(i).weight] + items.get(i).value);
+        for (int i = 0; i < n; i++){
+            for (int j = Math.max(items.get(i).weight,hadCalculateCapacity+1);j<=capacity;j++){
+                dp[j] = Math.max(dp[j],dp[j - items.get(i).weight]+items.get(i).value);
             }
         }
     }

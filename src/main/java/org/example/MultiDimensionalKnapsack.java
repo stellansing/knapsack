@@ -1,39 +1,37 @@
 package org.example;
 
 public class MultiDimensionalKnapsack {
-    public static int solve(int[][] items, int[] limits) {
+    public static int solve(int[][] items, int[]limits) {
             // 预计算总状态数和偏移量
             int k = limits.length;
-            int totalStates = 1;
-            int[] offsets = new int[k];
-            offsets[0] = 1;
-            totalStates *= (limits[0] + 1);
-            for (int i = 1; i < k; i++) {
-                offsets[i] = offsets[i - 1] * (limits[i - 1] + 1);//上一维度的值加上（当前维度的值加上额外的0）
-                totalStates *= (limits[i] + 1);
-            }
-            int[] dp = new int[totalStates];//总共有totalStates种状态
+            int total = limits[0]+1;
+            int[] offsets = new int[k];//记录每一个维度的偏移量
 
+            offsets[0]=1;
+            for(int i=1;i<k;i++){
+                offsets[i] = offsets[i-1]*(limits[i-1]+1);//上一维度的值加上（当前维度的值加上额外的0）
+                total *= limits[i]+1;
+            }
+            int[] dp = new int[total];//总共有total种状态
             // 处理每个物品
-            for (int[] item : items) {
-                for (int state = totalStates - 1; state >= 0; state--) {
-                    boolean feasible = true;
-                    int prevState = state;//记录选了当前物品后，减少物品占用的容量后的状态
+            for(int[] item : items){
+                for (int i=total-1;i>=0;i--){
+                    boolean isAble = true;
+                    int pre = i;//记录选了当前物品后，减少物品占用的容量后的状态
                     // 检查并计算前一个状态
-                    for (int d = 0; d < k; d++) {
-                        int dimValue = (state / offsets[d]) % (limits[d] + 1);
-                        if (dimValue < item[d+1]) {
-                            feasible = false;//当前状态无法容纳该物品
+                    for(int d=0;d<k;d++){
+                        if((i/offsets[d])%(limits[d]+1) < item[d+1]){
+                            isAble = false;//当前状态无法容纳该物品
                             break;
                         }
-                        prevState -= item[d+1] * offsets[d];
+                        pre -= item[d+1]*offsets[d];
                     }
-                    if (feasible && prevState >= 0) {
-                        dp[state] = Math.max(dp[state], dp[prevState] + item[0]);
+                    if(isAble && pre>=0){
+                        dp[i] = Math.max(dp[i],dp[pre]+item[0]);
                     }
                 }
             }
-            return dp[totalStates - 1];
+            return dp[total - 1];
     }
     public static void main(String[] args) {
         //第一个维度为价值

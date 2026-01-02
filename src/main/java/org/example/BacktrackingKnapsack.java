@@ -40,7 +40,7 @@ public class BacktrackingKnapsack {
                 }
             }
 
-            if(dp[value.length-1][maxV]>capacity || dp[value.length-1][maxV]==-1) {
+            if(dp[value.length-1][maxV]>capacity || dp[value.length-1][maxV]==-1){
                 int i;
                 for(i = maxV;(dp[value.length-1][i]>capacity || dp[value.length-1][i]==-1) && i>0;i--);
                 System.out.println("无法达到价值"+maxV);

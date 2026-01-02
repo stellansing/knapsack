@@ -17,7 +17,6 @@ public class MixedKnapsack {
         }
     }
 
-
     //在已经计算了hadCalculateCapacity的容量下的dp数组，计算容量为capacity的背包最大价值
     private static void dpHelper(List<Item> items, int capacity, int[] dp) {
         int n = items.size();

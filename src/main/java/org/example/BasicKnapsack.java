@@ -1,7 +1,7 @@
 package org.example;
 //基础01背包
 public class BasicKnapsack {
-    public static int solve(int[] value, int[] weight, int capacity){
+    public static int solve(int[] value,int[] weight,int capacity){
         int length = value.length;
         int[] dp=new int[capacity+1];
         for(int i=0;i<=capacity;i++) dp[i]=0;
